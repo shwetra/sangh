@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mens</title>
+ <style>
+ #sorting>select{
+    padding: 2px 5px;
+    border-radius:4px;
+    font-size:17px;
+    margin-bottom:20px;
+    font-family:sans-serif;
+    font-weight:bold;
+    background-color:rgb(31, 213, 15);
+    border: 3px solid rgb(0, 0, 0);
+}
+#sorting>select:hover{
+    opacity:0.8;
+    cursor:pointer;
+}
+
+     body{
+      font-family:sans-serif;
+    }
+    #container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      width: 100%;
+      gap: 20px;
+      font-family: sans-serif;
+    }
+
+    #container>div {
+      box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+      border-radius: 10px;
+      padding: 0px 0px 10px 0px;
+    }
+
+    #container>div>div {
+      display: flex;
+      justify-content: space-between;
+      padding: 0px 15px;
+      margin-top: -40px;
+    }
+
+    #container>div>div>p+p {
+      text-decoration: line-through;
+      color: grey;
+    }
+
+    img {
+      width: 100%;
+      border-radius:10px;
+    }
+
+    button {
+      margin: 0px 15px;
+      border-radius: 4px;
+      font-size: 17px;
+      border:rgb(36, 20, 135) 3px solid;;
+      background-color: rgb(245, 137, 14);
+      color: rgb(255, 255, 255);
+      padding:4px 5px;
+    }
+    button:hover{
+      cursor:pointer;
+      color:blue;
+      border:3px solid rgb(237, 9, 28);
+      background-color: beige;
+    }
+    h4 {
+      padding: 15px;
+      margin-top: -15px;
+    }
+    h4+h4{
+      margin-top:-40px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>Mens Page</h2>
+  <div id="sorting">
+    <select id="sortPrice" onchange="sortByPrice()"> 
+      <option value="">Sort By Price</option>
+      <option value="Low to High">Low to High</option>
+      <option value="High to Low">High to Low</option>
+    </select>
+    <select id="sortName" onchange="sortByName()">
+      <option value="">Sort By Name</option>
+      <option value="Ascending">Ascending</option>
+      <option value="Descending">Descending</option>
+    </select>
+  </div>
+  <div id="container"></div>
+
+</body>
+
+</html>
+<script>
+  var cartArr = JSON.parse(localStorage.getItem("cartData")) || [];
+  var mensData = [
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-EX4296/reebok_EX4296_1.jpg.plp",
+      name: "MEN'S REEBOK RUNNING ROADMAP SHOES",
+      price: 1170,
+      strikedoffprice: 2599,
+      brand:"Nike"
+    },
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-EX3921/reebok_EX3921_1.jpg.plp",
+      name: "MEN'S REEBOK SWIM ARUBA FLIP SLIPPERS ",
+      price: 699,
+      strikedoffprice: 999,
+      brand:"Adidas",
+        },
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-EX4160/reebok_EX4160_1.jpg.plp",
+      name: " MEN'S REEBOK RUNNING AUSTIN SHOES",
+      price: 945,
+      strikedoffprice: 2099,
+      brand:"Puma"
+    },
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-FV8798/MEN_SWIM_SLIPPERS_FV8798_1.jpg.plp",
+      name: "MEN'S REEBOK SWIM AVENGER FLIP LP SLIPPERS",
+      price: 399,
+      strikedoffprice: 799,
+
+brand:"Adidas"    },
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-EW5173/reebok_EW5173_1.jpg.plp",
+      name: "MEN'S REEBOK RUNNING TEMPO SHOES ",
+      price: 1620,
+      strikedoffprice: 3599,
+      brand:"Sparx"
+    },
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-FV7329/reebok_FV7329_1.jpg.plp ",
+      name: " MEN'S REEBOK RUNNING ASTRO BOOSTER SHOES ",
+      price: 1440,
+      strikedoffprice: 3199,
+      brand:"Nike"
+    },
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-GD8567/MEN_TRAINING_PANTS_GD8567_1.jpg.plp ",
+      name: " MEN'S TRAINING WORKOUT READY ELITAGE PANTS ",
+      price: 1999,
+      strikedoffprice: 3199,
+      brand:"Nike"
+    },
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-GQ8758/reebok_GQ8758_1.jpg.plp ",
+      name: "MEN'S REEBOK TRAINING  POLO T-SHIRTS TEE  ",
+      price: 769,
+      strikedoffprice: 1099,
+      brand:"Adidas"
+    },
+   
+    {
+      image_url:
+        "https://content.shop4reebok.com/static/Product-HG5456/reebok_HG5456_1.jpg.plp",
+      name: "MEN'S REEBOK FITNESS TRAINING  SWEATSHIRT",
+      price: 1079,
+      strikedoffprice: 1799,
+      brand:"Nike"
+    },
+  ];
+
+  displayData(mensData)
+
+  function displayData(mensData) {
+    document.querySelector("#container").innerHTML = "";
+    mensData.forEach(function (elem) {
+      var card = document.createElement("div");
+
+      var image = document.createElement("img");
+      image.setAttribute("src", elem.image_url);
+
+      var dname = document.createElement("h4");
+      dname.innerText = elem.name;
+
+      var dbrand = document.createElement("h4");
+      dbrand.innerText = elem.brand;
+
+
+      var dprice = document.createElement("p");
+      dprice.innerText = elem.price;
+
+      var sdprice = document.createElement("p");
+      sdprice.innerText = elem.strikedoffprice;
+
+      var card1 = document.createElement("div");
+      card1.append(dprice, sdprice);
+
+      var btn = document.createElement("button");
+      btn.innerText = "Add to Cart";
+      btn.addEventListener("click", function () {
+        addToCart(elem);
+      })
+
+      card.append(image, dname,dbrand, card1, btn);
+      document.querySelector("#container").append(card);
+
+      function addToCart(elem) {
+        var flag = true;
+        cartArr.forEach(function (ele) {
+          if (elem.image_url === ele.image_url && elem.name === ele.name && elem.price === ele.price && elem.strikedoffprice === ele.strikedoffprice) {
+            flag = false;
+          }
+        })
+        if (flag) {
+          cartArr.push(elem);
+          localStorage.setItem("cartData", JSON.stringify(cartArr));
+          alert("Item added successfully!")
+        }
+        else {
+          alert("Item already added!")
+        }
+
+      }
+
+    })
+  }
+  
+ function sortByPrice(){
+   var option = document.querySelector("#sortPrice").value;
+   if(option==="Low to High"){
+     mensData.sort(function(a,b){
+       var a = +a.price;
+       var b = +b.price;
+       if(a<b){
+         return -1;
+       }
+       else if(a>b){
+         return 1;
+       }
+       else {
+         return 0;
+       }
+     })
+     displayData(mensData)
+   }
+   if(option==="High to Low"){
+     mensData.sort(function(a,b){
+       var a = +a.price;
+       var b = +b.price;
+       if(a<b){
+         return 1;
+       }
+       else if(a>b){
+         return -1;
+       }
+       else {
+         return 0;
+       }
+     })
+     displayData(mensData)
+   }
+ }
+ 
+ function sortByName(){
+   var option = document.querySelector("#sortName").value;
+   if(option==="Ascending"){
+     mensData.sort(function(a,b){
+       var a = a.name;
+       var b = b.name;
+       if(a<b){
+         return -1;
+       }
+       else if(a>b){
+         return 1;
+       }
+       else {
+         return 0;
+       }
+     })
+     displayData(mensData)
+   }
+   if(option==="Descending"){
+     mensData.sort(function(a,b){
+       var a = a.name;
+       var b = b.name;
+       if(a<b){
+         return 1;
+       }
+       else if(a>b){
+         return -1;
+       }
+       else {
+         return 0;
+       }
+     })
+     displayData(mensData)
+   }
+ }
+ 
+</script>
